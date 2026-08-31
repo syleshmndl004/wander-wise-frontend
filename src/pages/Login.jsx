@@ -93,10 +93,23 @@ const Login = () => {
                       </Field>
                     )}
                   />
+
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <label className="flex items-center gap-2">
+                      <input type="checkbox" className="h-4 w-4 rounded border-border" />
+                      Remember me
+                    </label>
+                    <a href="/register" className="text-primary hover:underline">
+                      Create account
+                    </a>
+                  </div>
                 </CardContent>
 
-                <CardFooter>
+                <CardFooter className="flex flex-col gap-3">
                   <Button className="w-full" type="submit">Login</Button>
+                  <p className="text-center text-sm text-muted-foreground">
+                    Need an account? <a href="/register" className="font-medium text-primary hover:underline">Sign up</a>
+                  </p>
                 </CardFooter>
               </Card>
             </form>
