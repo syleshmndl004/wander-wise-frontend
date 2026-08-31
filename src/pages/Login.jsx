@@ -14,6 +14,8 @@ import { Controller } from "react-hook-form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { toast } from 'sonner';
+import api from '../api/axios';
 
 const formSchema =z.object({
     email: z.string().email().min(5, "Must be at least 5 characters"),
@@ -30,9 +32,25 @@ const Login = () => {
         }
     })
 
-    const onSubmit =(data) => { //for what to submit the form data
-        console.log(data)
+    const onSubmit =async (data) => { //for what to submit the form data
+        console.log(data);
+         try { 
+       
+      const response = await api.post("/auth/login", data);
+
+      if (response.data === 200) {
+           toast.success("Login successful");
+      } else {
+          toast.error(response.message || "Login failed");
+        }
+
+    } catch (error) {
+      console.error(error.message || "Some error occured");
+      console.log(error.message);
+
     }
+  }
+
   return (
     // for image
     <div className="w-full h-dvh pt-20 bg-white"> 
@@ -119,5 +137,6 @@ const Login = () => {
     </div>
   )
 }
+
 
 export default Login

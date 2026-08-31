@@ -16,6 +16,8 @@ import { Controller } from "react-hook-form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import api from "../api/axios";
+import { toast } from "sonner";
 
 const formSchema = z
   .object({
@@ -38,8 +40,26 @@ const Register = () => {
       confirmPassword: "",
     },
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    
+    //
+    const {confirmPassword , ...newData} = data;//destructuring to remove confirmPassword from the data object before sending it to the backend
+    try { 
+       
+      const response = await api.post("/auth/register", newData);
+
+      if (response.data === 201) {
+           toast.success("Registration successful");
+      } else {
+          toast.error(response.message || "Registration failed");
+        }
+
+    } catch (error) {
+      console.error(error.message || "Some error occured");
+      console.log(error.message);
+
+    }
   };
 
   return (

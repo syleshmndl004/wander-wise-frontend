@@ -1,6 +1,6 @@
 import axios from "axios"; // axios is for making HTTP requests
 
-const baseUrl = process.env.VITE_API_BASE_URL;
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
     baseURL: baseUrl,
@@ -9,7 +9,9 @@ const api = axios.create({
 api.interceptors.request.use((config)=>{
     const token = localStorage.getItem("token");//saves data stored in localStorage in the variable token
 
-    config.headers.Authorization = `Bearer ${token}`; // adds the token to the Authorization header of the request
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`; // adds the token to the Authorization header of the request
+    }
 
     return config;// returns the modified config object to be used in the request
     
