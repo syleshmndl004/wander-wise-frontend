@@ -16,6 +16,7 @@ import { Input } from "../components/ui/input";
 import api from "../api/axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const formSchema = z.object({
   email: z.string().email().min(5, "Must be atleast 5 characters").trim(),
@@ -23,7 +24,11 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+
   const navigate = useNavigate();
+
+  const {onLogin} = useAuth();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,7 +43,10 @@ const Login = () => {
       const response = await api.post("/auth/login", data);
 
       if (response.status === 200){
-        toast.success("Login successfully")
+        toast.success("Login successfully");
+        
+        onLogin(response.data.token,data);
+
         navigate("/dashboard");
       }else{
         toast.error( response.message || "Login failed");

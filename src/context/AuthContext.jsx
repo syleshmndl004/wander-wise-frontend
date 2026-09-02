@@ -6,11 +6,11 @@ export const AuthProvider = ({children})=>{ //context provider
   const[token,setToken] = useState(localStorage.getItem("token")|| null);
   const  [userData,setUserData] = useState(null);
   
-  const onLogin = ()=>{ //login function
-    setToken("jwttoken");
+  const onLogin = (jwtToken,user)=>{ //login function
+    setToken(jwtToken);
     setUserData(user);
 
-    localStorage.setItem("token","jwttoken");
+    localStorage.setItem("token", jwtToken);
   }
 
   const onLogout = ()=>{ //logout function

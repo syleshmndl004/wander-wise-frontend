@@ -51,7 +51,7 @@ const Register = () => {
       const response = await api.post("/auth/register", newData);
 
       if (response.status === 201){
-        toast.success("Register successfully")
+        toast.success("Register successfully");
         navigate("/login");
       }else{
         toast.error( response.message || "Register failed");
