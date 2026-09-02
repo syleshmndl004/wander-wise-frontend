@@ -1,23 +1,22 @@
 import React from "react";
 import * as z from "zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   Card,
+  CardAction,
   CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardAction,
-  CardFooter,
-} from "@/components/ui/card";
-import { Controller } from "react-hook-form";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+} from "../components/ui/card";
+import { Field, FieldError, FieldLabel } from "../components/ui/field";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 import api from "../api/axios";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z
   .object({
@@ -31,6 +30,9 @@ const formSchema = z
     path: ["confirmPassword"], // path of error
   });
 const Register = () => {
+
+  const navigate = useNavigate();
+  
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,40 +44,41 @@ const Register = () => {
   });
   const onSubmit = async (data) => {
     console.log(data);
-    
-    //
-    const {confirmPassword , ...newData} = data;//destructuring to remove confirmPassword from the data object before sending it to the backend
-    try { 
-       
+
+    const {confirmPassword, ...newData} = data;
+
+    try {
       const response = await api.post("/auth/register", newData);
 
-      if (response.data === 201) {
-           toast.success("Registration successful");
-      } else {
-          toast.error(response.message || "Registration failed");
-        }
+      if (response.status === 201){
+        toast.success("Register successfully")
+        navigate("/login");
+      }else{
+        toast.error( response.message || "Register failed");
+      }
 
     } catch (error) {
-      console.error(error.message || "Some error occured");
-      console.log(error.message);
-
+      toast.error(error.message || "Some error occured");
+      console.log(error.message)
     }
   };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
-      <Card className={"w-1/4 mx-auto mt-20"}>
+      <Card className={"w-1/4 mx-auto mt-40"}>
         <CardHeader>
-          <CardTitle>Register to WanderWise</CardTitle>
-          <CardDescription>Enter your credentials to continue</CardDescription>
+          <CardTitle>Register to Wanderwise</CardTitle>
+          <CardDescription>Enter your credentials to continue.</CardDescription>
           <CardAction>
-            <img src="/logo.png" alt="Logo" className="w-12 " />
+            <img
+              src="/logo.png"
+              alt="wanderwise Logo.png"
+              className="w-12"
+            />
           </CardAction>
         </CardHeader>
 
-        <CardContent className="space-y-2">
-
-          {/* Name */}
+        <CardContent className="space-y-4">
           <Controller
             name="name"
             control={form.control}
@@ -86,26 +89,7 @@ const Register = () => {
                   {...field}
                   id={field.name}
                   type="text"
-                  placeholder="Roman Reigns"
-                  aria-invalid={fieldState.invalid}
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-           <Controller
-            name="email"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Enter your email</FieldLabel>
-                <Input
-                  {...field}
-                  id={field.name}
-                  type="email"
-                  placeholder="roman.reigns@example.com"
+                  placeholder="John Doe"
                   aria-invalid={fieldState.invalid}
                 />
                 {fieldState.invalid && (
@@ -115,7 +99,27 @@ const Register = () => {
             )}
           />
 
-           <Controller
+          <Controller
+            name="email"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Enter your email</FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  type="email"
+                  placeholder="johndoe@example.com"
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          <Controller
             name="password"
             control={form.control}
             render={({ field, fieldState }) => (
@@ -135,12 +139,12 @@ const Register = () => {
             )}
           />
 
-           <Controller
+          <Controller
             name="confirmPassword"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Confirm your Password</FieldLabel>
+                <FieldLabel htmlFor={field.name}>Confirm your password</FieldLabel>
                 <Input
                   {...field}
                   id={field.name}
@@ -155,10 +159,12 @@ const Register = () => {
             )}
           />
         </CardContent>
-         <CardFooter>
-          <Button className="w-full" type="submit">Register</Button>
-         </CardFooter>
 
+        <CardFooter>
+          <Button type="submit" className="w-full">
+            Register
+          </Button>
+        </CardFooter>
       </Card>
     </form>
   );
