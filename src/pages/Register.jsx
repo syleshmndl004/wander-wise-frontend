@@ -17,6 +17,7 @@ import { Button } from "../components/ui/button";
 import api from "../api/axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const formSchema = z
   .object({
@@ -32,6 +33,13 @@ const formSchema = z
 const Register = () => {
 
   const navigate = useNavigate();
+
+    const { token } = useAuth();
+
+    if(token){
+        navigate("/dashboard");
+    }
+
   
   const form = useForm({
     resolver: zodResolver(formSchema),

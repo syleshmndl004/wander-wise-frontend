@@ -1,13 +1,20 @@
 
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Landing from './pages/Landing'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import useAuth from './hooks/useAuth'
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
+import Dashboard from './pages/Dashboard'
+import AppLayout from './layouts/AppLayout'
+import Trip from './pages/trips/Trip'
+import AddTrip from './pages/trips/AddTrip'
+import TripDetails from './pages/trips/TripDetails'
+import { Edit } from 'lucide-react'
+import EditTrip from './pages/trips/EditTrip'
 
 const App = () => {
   const { token, onLogout } = useAuth();
@@ -49,9 +56,19 @@ const App = () => {
     <Route path="/" element={<Landing />} />
     <Route path="/about" element={<About />} /> 
     <Route path="/contact" element ={<Contact />} />
+
     <Route path="/Login" element={<Login/>} />
     <Route path="/Register" element={<Register/>} />
 
+    <Route element={<ProtectedRoutes />} >
+    <Route path="/Dashboard" element={<Dashboard/>} />
+
+    <Route path='/trips' element={<Trip />} />
+    <Route path="/trips/add" element={<AddTrip />} />
+    <Route path='/trips/:id' element={<TripDetails />} />
+    <Route path='/trips/edit/:id' element={<EditTrip />} />
+          
+    </Route>
     </Routes>
 
     </BrowserRouter>

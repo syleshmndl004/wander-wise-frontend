@@ -27,7 +27,11 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const {onLogin} = useAuth();
+ const { onLogin, token } = useAuth();
+
+    if(token){
+        navigate("/dashboard");
+    }
 
   const form = useForm({
     resolver: zodResolver(formSchema),
