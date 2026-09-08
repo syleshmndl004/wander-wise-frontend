@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Navbar from "../components/common/Navbar";
 import { Button } from "../components/ui/button";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+// import {
+//   HoverCard,
+//   HoverCardContent,
+//   HoverCardTrigger,
+// } from "@/components/ui/hover-card";
 import {
   Card,
   CardAction,
@@ -38,7 +38,8 @@ const Contact = () => {
     <div className="space-y-10 pb-20">
       <Navbar />
 
-      <div className="mx-auto flex max-w-5xl flex-col gap-8 px-6 lg:flex-row">
+      {/*
+       <div className="mx-auto flex max-w-5xl flex-col gap-8 px-6 lg:flex-row">
         <div className="flex-1 space-y-6">
           <Button>Button</Button>
           <Button variant="destructive">clickme</Button>
@@ -49,7 +50,8 @@ const Contact = () => {
               <img src="/heroImage.png" alt="Scenic travel photo" />
             </HoverCardContent>
           </HoverCard>
-        </div>
+        </div> 
+        */}
 
         <Card className="w-full max-w-md">
           <CardHeader>
@@ -97,7 +99,6 @@ const Contact = () => {
           </CardFooter>
         </Card>
       </div>
-    </div>
   );
 };
 
