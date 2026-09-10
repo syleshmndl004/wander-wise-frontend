@@ -12,13 +12,13 @@ const AppNavbar = () => {
     ">
         <div>
             {/*left part */}
-            <h1 className="text-3xl font-semibold text-black">WanderWise</h1>
+            <h1 className="text-3xl font-semibold text-blue-500">WanderWise</h1>
         </div>
 
             {/*right part*/}
         <div className="flex items-center gap-16 ">
            <nav className="space-x-6 text-lg font-medium
-            [&>a]:hover:text-purple-600 ">
+            [&>a]:hover:text-purple-600 text-blue-700">
 
             <a href ="/Dashboard">Dashboard</a>
             <a href="/trips">Trips</a>

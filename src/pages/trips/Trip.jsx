@@ -1,8 +1,10 @@
 import React from 'react'
-
+import TripForm from '../../components/common/TripForm'
 const Trip = () => {
   return (
-    <div>Trip</div>
+    <div>
+      <TripForm/>
+    </div>
   )
 }
 

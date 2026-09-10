@@ -70,7 +70,7 @@ const Login = () => {
       >
         <div className="w-full overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1612031326777-1391836af889?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHRyYXZlbCUyMG5lcGFsfGVufDB8MXwwfHx8MA%3D%3D"
+            src="login.png"
             alt="wanderwise login page"/>
         </div>
 
