@@ -1,11 +1,88 @@
-import React from 'react'
-import TripForm from '../../components/common/TripForm'
-const Trip = () => {
-  return (
-    <div>
-      <TripForm/>
-    </div>
-  )
-}
+import React, { useEffect, useState } from "react";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { EllipsisVertical, Plus } from "lucide-react";
+import api from "../../api/axios";
+import { toast } from "sonner";
+import { formatDate } from "../../lib/utils";
 
-export default Trip
+const Trip = () => {
+  const [trips, setTrips] = useState([]);
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await api.get("/trips");
+        setTrips(response.data);
+      } catch (error) {
+        toast.error("Some errir occur while fething trips");
+        console.log(error);
+      }
+    };
+
+    fetchTrips();
+  }, []);
+
+  return (
+    <div className="px-20 py-24">
+      <Card>
+        <CardHeader className="border-b">
+          <CardTitle>See your trips</CardTitle>
+          <CardDescription> View and manage all your trips </CardDescription>
+          <CardAction>
+            <a href="/trips/add">
+              <Button>
+                {" "}
+                <Plus />
+                Add Trip{" "}
+              </Button>
+            </a>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-6">
+            {trips.length == 0 ? (
+              <div className="text-3xl font-semibold text-center py-20 ">
+                {" "}
+                You do not have any trip to show. Create a new trip
+              </div>
+            ) : (
+              trips.map((trip) => {
+                return (
+                  <Card key={trip._id}>
+                    <CardHeader className="border-b">
+                      <CardTitle>{trip.title}</CardTitle>
+                      <CardDescription>
+                        {formatDate(trip.startDate)} - {formatDate(trip.endDate)}
+                      </CardDescription>
+                      <CardAction>
+                        <EllipsisVertical />
+                      </CardAction>
+                    </CardHeader>
+                    <CardContent>
+                      <p>Budget:  Rs {trip.budget.total}</p>
+                      <p>Spent: Rs {trip.budget.spent}</p>
+                    </CardContent>
+                    <CardFooter>
+                      <p>Destination:{trip.destinations.join(", ")}</p>
+                    </CardFooter>
+                  </Card>
+                );
+              })
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default Trip;

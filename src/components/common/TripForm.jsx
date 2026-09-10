@@ -7,17 +7,20 @@ import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import { Button } from '../ui/button'
+import api from '../../api/axios'
+import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 const budgetSchema = z.object({
-  total: z.number().min(1, "Must be atleast 1"),
-  spent: z.number().optional()
+  total: z.coerce.number().min(1, "Must be atleast 1"),
+  spent: z.coerce.number().optional()
 })
 
 const formSchema = z.object({
   title: z.string().min(5, "Must be atleast 5 characters"),
   description: z.string().optional(),
-  startDate: z.date(),
-  endDate: z.date(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
   destinations: z.array(
     z.string().min(3, "Must be atleast 3 characters")
   ).min(1, "Atleast one destination is required"),
@@ -28,6 +31,8 @@ const formSchema = z.object({
 })
 
 const TripForm = () => {
+
+  const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -45,24 +50,39 @@ const TripForm = () => {
     }
   })
 
-  const {fields,append,remove}= useFieldArray({
-    name: "destinations",
-    control: form.control
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "destinations"
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+
+    try{
+      const response = await api.post("/trips", data);
+
+      if(response.status === 201){
+        toast.success( "Trip created successfully" );
+        navigate("/trips");
+      }else{
+        toast.error("Error creating trip.")
+        console.log(response);
+      }
+    }catch(error){
+      toast.error( error.message || "Error creating trip");
+      console.log(error);
+    }
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
-      <Card className="w-1/3 mx-auto">
+    <form className="py-20" onSubmit={form.handleSubmit(onSubmit)}>
+      <Card className="w-2/5 mx-auto">
         <CardHeader>
           <CardTitle>Add your Trip</CardTitle>
           <CardDescription>Fill out the details of your next trip.</CardDescription>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="space-y-4">
           <Controller
             name="title"
             control={form.control}
@@ -176,7 +196,8 @@ const TripForm = () => {
             />
 
           </div>
-          <div className="flex items-center justify-between">
+
+              <div className="flex items-center justify-between">
             <h2>Destination</h2>
             <Button type="button" onClick={() => append(' ')} className="bg-blue-500 text-white rounded-lg py-1 px-3 hover:bg-blue-600 h-8.5">Add</Button>
             </div>
