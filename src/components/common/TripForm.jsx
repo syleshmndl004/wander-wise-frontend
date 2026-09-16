@@ -204,7 +204,7 @@ const TripForm = () => {
          
           {
             fields.map((item, index) => (
-              <div key={item.id} className="flex  items-end  gap-2">
+              <div key={item.id} className="flex items-end  gap-2">
                 <Controller
                   name={`destinations.${index}`}
                   control={form.control}
@@ -223,10 +223,10 @@ const TripForm = () => {
                   )}
                 />
                  <button 
-                  type="button" 
+                  type="button" variant="outline"
                   onClick={() => remove(index)} 
-                  className="text-red-500 border rounded-lg py-1 px-3 bg-red-100 hover:bg-red-200 h-8.5"
-                >Remove</button>
+                  className=" border rounded-lg py-1 px-3  hover:bg-red-200 h-8.5"
+                >X</button>
               </div>
             ))
           }

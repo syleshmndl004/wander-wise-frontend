@@ -13,9 +13,18 @@ import { EllipsisVertical, Plus } from "lucide-react";
 import api from "../../api/axios";
 import { toast } from "sonner";
 import { formatDate } from "../../lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 const Trip = () => {
   const [trips, setTrips] = useState([]);
+  const [dependency, setDependency] = useState(0);
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -29,7 +38,23 @@ const Trip = () => {
     };
 
     fetchTrips();
-  }, []);
+  }, [dependency]);
+
+  const onDelete = async (tripId) => {
+    try {
+      const response = await api.delete(`/trips/${tripId}`);
+      // setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== tripId));
+      if (response.status === 200) {    
+      toast.success("Trip deleted successfully");
+      setDependency(dependency + 1);
+      } else {
+        toast.error("Error deleting trip");
+      }
+    } catch (error) {
+      toast.error("Error message "|| "Error deleting trip");
+      console.log(error);
+    }
+  }
 
   return (
     <div className="px-20 py-24">
@@ -61,14 +86,31 @@ const Trip = () => {
                     <CardHeader className="border-b">
                       <CardTitle>{trip.title}</CardTitle>
                       <CardDescription>
-                        {formatDate(trip.startDate)} - {formatDate(trip.endDate)}
+                        {formatDate(trip.startDate)} -{" "}
+                        {formatDate(trip.endDate)}
                       </CardDescription>
                       <CardAction>
-                        <EllipsisVertical />
+                        <DropdownMenu>
+                          <DropdownMenuTrigger
+                            render={<Button variant="outline" />}><EllipsisVertical />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuGroup>
+
+                              {/* Manage Trip */}
+                              <DropdownMenuLabel>Manage Trip</DropdownMenuLabel>
+                              <DropdownMenuItem>< a className="w-full"href={`/trips/${trip._id}`}>View Trip</a></DropdownMenuItem>
+                              <DropdownMenuItem>< a className="w-full"href={`/trips/edit/${trip._id}`}>Edit Trip</a></DropdownMenuItem> 
+                              <DropdownMenuItem onClick={() => onDelete(trip._id)}>Delete Trip</DropdownMenuItem>
+
+                            </DropdownMenuGroup>
+                           
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </CardAction>
                     </CardHeader>
                     <CardContent>
-                      <p>Budget:  Rs {trip.budget.total}</p>
+                      <p>Budget: Rs {trip.budget.total}</p>
                       <p>Spent: Rs {trip.budget.spent}</p>
                     </CardContent>
                     <CardFooter>
@@ -80,9 +122,14 @@ const Trip = () => {
             )}
           </div>
         </CardContent>
+        <CardFooter>
+          <p className="text-gray-500 ">Total Trips: {trips.length}
+          </p>
+        </CardFooter>
       </Card>
-    </div>
+      </div>
   );
 };
 
-export default Trip;
+export default Trip;  
+      
