@@ -1,7 +1,7 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 
 const formSchema = z.object({
     name: z.string().min(3, "Must be atleast three characters"),
-    amount: z.coerce.number().min(1, "Must be atleast one digit")
+    amount: z.coerce.number().min(1, "must be atleast one digit")
 })
 
 const ExpenseForm = ({trip}) => {
@@ -22,50 +22,49 @@ const ExpenseForm = ({trip}) => {
             name: "",
             amount: ""
         }
-    })
+    });
 
     const onSubmit = async (data) => {
 
         const budget = {
-            
-            ...trip.budget,
-            spent: trip.budget.spent + data.amoumt,
-            expense:[
-                ...trip.budget.expense,
+            total: trip.budget.total,
+            spent: trip.budget.spent + data.amount,
+            expenses: [
+                ...trip.budget.expenses,
                 {
-                    name:data.name,
-                    amount:data.amount
+                    name: data.name,
+                    amount: data.amount
                 }
             ]
         }
+
         console.log(data);
 
-        try {
-            const response = await api.patch(`/trips/${trip._id}`,{budget});
+        try{
+            const response = await api.patch(`/trips/${trip._id}`, {budget});
 
-            if(response.status === 200){
-                toast.success("Expense added sucessfully");
+            if (response.status === 200){
+                toast.success("Expense added successfully");
                 window.location.reload();
-
-            } else{
+            }else{
                 toast.error("Error while adding expense");
             }
-        } catch(error){
-            toast.error(error.message || "Error while addiing expnese");
+        }catch(error){
+            toast.error(error.message || "Error while adding expense");
             console.log(error);
         }
-
     }
 
     return (
+
         <form onSubmit={form.handleSubmit(onSubmit)}>
             <Card>
                 <CardHeader className="border-b">
                     <CardTitle>Add Expenses</CardTitle>
-                    <CardDescription>Enter the name and amount of expense</CardDescription>
+                    <CardDescription>Enter name and amount of expense</CardDescription>
                 </CardHeader>
+                <CardContent className={"space-y-2"}>
 
-                <CardContent className="space-y-2">
                     <Controller
                         name="name"
                         control={form.control}
@@ -94,17 +93,17 @@ const ExpenseForm = ({trip}) => {
                                     {...field}
                                     id={field.name}
                                     type="number"
-                                    placeholder="2000"
+                                    placeholder="1000"
                                     aria-invalid={fieldState.invalid}
                                 />
                                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                         )}
                     />
-                </CardContent>
 
+                </CardContent>
                 <CardFooter>
-                    <Button className="w-full" type="submit">submit</Button>
+                    <Button className={"w-full"} type="submit">Submit</Button>
                 </CardFooter>
             </Card>
         </form>

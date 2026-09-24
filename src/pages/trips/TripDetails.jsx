@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Card, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
 import ExpenseForm from '../../components/common/ExpenseForm'
-import InviteForm from '../../components/common/InviteForm'
 import { useParams } from 'react-router-dom';
 import api from '../../api/axios';
 import { toast } from 'sonner';
+import InviteForm from '../../components/common/InviteForm';
+import TripInfo from '../../components/common/TripInfo';
 
 const TripDetails = () => {
 
@@ -37,14 +38,15 @@ const TripDetails = () => {
 
       {/* left part  */}
       <Card className="w-3/4">
-        
+        <TripInfo trip={trip} />
       </Card>
 
       {/* right part  */}
-      <div className="w-1/4 space-y-4">
-
+      <div className="w-1/4">
+          
           <ExpenseForm trip={trip} />
-          <InviteForm trip={trip} />
+
+          <InviteForm trip={trip}/>
 
       </div>
 
