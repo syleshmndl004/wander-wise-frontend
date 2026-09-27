@@ -1,4 +1,3 @@
-import React from 'react'
 import CustomButton from './CustomButton'
 import useAuth from '../../hooks/useAuth'
 
@@ -22,7 +21,7 @@ const AppNavbar = () => {
 
             <a href ="/Dashboard">Dashboard</a>
             <a href="/trips">Trips</a>
-            <a href="/Itineraries">Itineraries</a>
+            <a href="/itineraries">Itineraries</a>
             <a href="/Baggage">Baggage</a>
             
            </nav>

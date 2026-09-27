@@ -1,5 +1,4 @@
 
-import React from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Landing from './pages/Landing'
 import About from './pages/About'
@@ -13,11 +12,12 @@ import AppLayout from './layouts/AppLayout'
 import Trip from './pages/trips/Trip'
 import AddTrip from './pages/trips/AddTrip'
 import TripDetails from './pages/trips/TripDetails'
-import { Edit } from 'lucide-react'
 import EditTrip from './pages/trips/EditTrip'
 import Baggage from './pages/baggage/Baggage'
 import BaggageDetails from './pages/baggage/BaggageDetails'
 import AcceptInvitation from './pages/AcceptInvitation'
+import Itineraries from './pages/itineraries/Itineraries'
+import ItineraryDetails from './pages/itineraries/ItineraryDetails'
 
 const App = () => {
   const { token, onLogout } = useAuth();
@@ -74,6 +74,9 @@ const App = () => {
     
           <Route path="/baggage" element={<Baggage />} />
           <Route path="/baggage/:id" element={<BaggageDetails />} />
+          <Route path="/itineraries" element={<Itineraries />} />
+          <Route path="/itineraries/:id" element={<ItineraryDetails />} />
+          <Route path="/Itineraries" element={<Navigate to="/itineraries" replace />} />
 
           <Route path="/trips/:id/invite/accept" element={<AcceptInvitation/>} />
           
